@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
     Uri fileData;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // eikhane
+
                 exportDBS();
+
             }
         });
 
@@ -145,9 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(deleteDatabase(dbpath)){
 
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
+
         }
 
         File targetDir = Environment.getDataDirectory();
@@ -175,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
                 source.close();
                 destination.close();
                 Toast.makeText(this, "DB Imported!", Toast.LENGTH_LONG).show();
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -282,6 +285,20 @@ public class MainActivity extends AppCompatActivity {
 
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //employeeOps.open();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //employeeOps.close();
+
     }
 
 
