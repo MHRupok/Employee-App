@@ -262,4 +262,6 @@ public class RecordListActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

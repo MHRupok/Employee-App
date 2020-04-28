@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     ImageView imageViewIcons;
     Uri fileData;
+    int initFlag = 0;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -122,7 +123,13 @@ public class MainActivity extends AppCompatActivity {
         mainDB = new DatabaseHelper(this,"RECORDDB.sqlite",null,1);
         mainDB.queryData("CREATE TABLE IF NOT EXISTS RECORD(id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR, age VARCHAR,gender VARCHAR,image BLOB)");
 
-        //initFolder();
+        if(initFlag==0)
+        {
+            initFolder();
+            initFlag = 1;
+        }
+
+
     }
 
     public void tempDB(){
@@ -145,8 +152,9 @@ public class MainActivity extends AppCompatActivity {
 
         String dbpath = getApplicationContext().getDatabasePath("RECORDDB.sqlite").getAbsolutePath();
 
-        if(deleteDatabase(dbpath)){
 
+        if(deleteDatabase(dbpath)){
+            Toast.makeText(MainActivity.this,"Importing..",Toast.LENGTH_SHORT).show();
 
         }
 
@@ -169,12 +177,11 @@ public class MainActivity extends AppCompatActivity {
         if(currentDB.exists()){
             try {
                 source = new FileInputStream(currentDB).getChannel();
-                Toast.makeText(MainActivity.this,"Read success!",Toast.LENGTH_SHORT).show();
                 destination = new FileOutputStream(backupDB).getChannel();
                 destination.transferFrom(source, 0, source.size());
                 source.close();
                 destination.close();
-                Toast.makeText(this, "DB Imported!", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "DB Imported!", Toast.LENGTH_LONG).show();
                 Intent intent = getIntent();
                 finish();
                 startActivity(intent);
@@ -211,14 +218,13 @@ public class MainActivity extends AppCompatActivity {
             destination.transferFrom(source, 0, source.size());
             source.close();
             destination.close();
-            Toast.makeText(this, "DB Exported to data/com.example.tigeritemployee/files/Download", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "DB Exported to data/com.example.tigeritemployee/files/Download", Toast.LENGTH_SHORT).show();
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void initFolder()
-    {
+    public void initFolder(){
         File sd = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
         File data = Environment.getDataDirectory();
 
@@ -236,15 +242,18 @@ public class MainActivity extends AppCompatActivity {
             destination.transferFrom(source, 0, source.size());
             source.close();
             destination.close();
-            //Toast.makeText(this, "DB Exported to data/com.example.tigeritemployee/files/Download", Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "DB Exported to data/com.example.tigeritemployee/files/Download", Toast.LENGTH_SHORT).show();
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static boolean deleteDatabase (File file){
-        return true;
-    }
+
+
+//    public static boolean deleteDatabase (File file){
+//
+//        return true;
+//    }
 
     public void goAddEmployeeActivity()
     {
@@ -287,19 +296,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //employeeOps.open();
 
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //employeeOps.close();
-
-    }
 
 
 
